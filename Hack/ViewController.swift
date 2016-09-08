@@ -35,9 +35,15 @@ class ViewController: UIViewController {
             print("Disconnected:", $0)
         }
         
+        
         // create new MQTT Connection
         return MQTT.newConnection(mqttConfig)
     }()
+    
+    func updateWheels() {
+        let command = "{\"Left\":\(wheelSpeed.left), \"Right\":\(wheelSpeed.right)}"
+        client.publishString(command, topic: "command/wheel_speed", qos: 0, retain: true)
+    }
     
     @IBOutlet var leftWheelLabel: UILabel! {
         didSet { leftWheelLabel.text = String(wheelSpeed.left) }
@@ -56,8 +62,7 @@ class ViewController: UIViewController {
             leftWheelLabel.text = String(wheelSpeed.left)
             rightWheelLabel.text = String(wheelSpeed.right)
             
-            let command = "{\"Left\":\(wheelSpeed.left),\"Right\":\(wheelSpeed.right)"
-            client.publishString(command, topic: "command/wheel_speed", qos: 2, retain: false)
+            updateWheels()
         }
     }
     
@@ -67,7 +72,7 @@ class ViewController: UIViewController {
         case .Changed:
             let y = recognizer.locationInView(recognizer.view).y
             let value = (y / recognizer.view!.bounds.height * 2) - 1
-            wheelSpeed.left = Int(value * -2000)
+            wheelSpeed.left = Int(value * -8000)
 
         default: break }
     }
