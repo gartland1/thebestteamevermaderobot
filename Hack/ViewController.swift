@@ -10,46 +10,15 @@ import UIKit
 import Moscapsule
 
 class ViewController: UIViewController {
-    
-    var middlePortrait = UIScreen.mainScreen().bounds.width/2
-    var middleLandscape = UIScreen.mainScreen().bounds.width/2
 
-
-    override func viewDidLoad() {
-        NSNotificationCenter.defaultCenter().addObserver(self, selector: #selector(ViewController.rotated), name:UIDeviceOrientationDidChangeNotification, object: nil)
-
-        super.viewDidLoad()
-
-    }
-    
-    func rotated()
-    {
-        if(UIDeviceOrientationIsLandscape(UIDevice.currentDevice().orientation))
-        {
-            middleLandscape = UIScreen.mainScreen().bounds.width/2
-            print(middleLandscape)
-            print("landscape")
-            
-        }else{
-            middlePortrait = UIScreen.mainScreen().bounds.width/2
-            print(middlePortrait)
-            print("portrait")
-        }
-        
-    }
-
-    override func didReceiveMemoryWarning() {
-        super.didReceiveMemoryWarning()
-        // Dispose of any resources that can be recreated.
-        
-    }
-    
-    
-    override func touchesMoved(touches: Set<UITouch>, withEvent event: UIEvent?) {
-        if let touch = touches.first {
-            let position :CGPoint = touch.locationInView(view)
-                print(position.x - middleLandscape, position.y - middlePortrait)
-        }
+    @IBAction func onDrag(gr:UIPanGestureRecognizer) {
+        switch gr.state {
+        case .Changed:
+            let point = gr.locationInView(gr.view)
+            let percent = CGPoint(x: point.x/gr.view!.bounds.width, y: point.y/gr.view!.bounds.height)
+            let result = CGPoint(x: percent.x * -2 + 1, y: percent.y * -2 + 1)
+            print(result)
+        default: return }
     }
     
     @IBAction func dance() {
