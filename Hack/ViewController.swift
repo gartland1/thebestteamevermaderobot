@@ -21,8 +21,8 @@ class ViewController: UIViewController {
         // Dispose of any resources that can be recreated.
     }
     
-    override func viewDidLoad() {
-        super.viewDidLoad()
+    override func viewDidAppear(animated: Bool) {
+        super.viewDidAppear(animated)
         
         let frontImageView = UIImageView(frame: CGRect(x: 0, y: 0, width: 640, height: 480))
         frontImageView.layer.anchorPoint =
@@ -37,41 +37,39 @@ class ViewController: UIViewController {
         backImageView.frame.origin = CGPoint(x: -382 + 100, y: -280)
         backCameraView.addSubview(backImageView)
         
-        let op = FeedQueueOperation()
-        if(self.queue.operationCount == 0){
-            op.subCallback(for: {image in
+        let alert = UIAlertController(
+            title: "Connect",
+            message: "Enter IP Adress",
+            preferredStyle: .Alert)
+        
+        alert.addTextFieldWithConfigurationHandler {
+            $0.text = "192.168.1.100"
+        }
+        
+        alert.addAction(UIAlertAction(title: "OK", style: .Default) { _ in
+            guard let text = alert.textFields?.first?.text else { fatalError() }
+            
+            let mqttConfig = MQTTConfig(clientId: "test", host: text, port: 1883, keepAlive: 60)
+            self.client = MQTT.newConnection(mqttConfig)
+            
+            let op = FeedQueueOperation(address: text) { image in
                 dispatch_async(dispatch_get_main_queue(), {
                     frontImageView.image = image
                     backImageView.image = image
                 })
-            })
+            }
+            
             self.queue.addOperation(op)
-        }
+        })
+        
+        self.presentViewController(alert, animated: true, completion: nil)
     }
     
-    var client: MQTTClient = {
-        let mqttConfig = MQTTConfig(clientId: "test", host: "192.168.1.107", port: 1883, keepAlive: 60)
-        mqttConfig.onPublishCallback = { messageId in
-            NSLog("published (mid=\(messageId))")
-        }
-        mqttConfig.onMessageCallback = { mqttMessage in
-            NSLog("MQTT Message received: payload=\(mqttMessage.payloadString)")
-        }
-        mqttConfig.onConnectCallback = {
-            print("Connected:", $0)
-        }
-        mqttConfig.onDisconnectCallback = {
-            print("Disconnected:", $0)
-        }
-        
-        
-        // create new MQTT Connection
-        return MQTT.newConnection(mqttConfig)
-    }()
+    var client: MQTTClient?
    
     func updateWheels() {
         let command = "{\"Left\":\(wheelSpeed.left), \"Right\":\(wheelSpeed.right)}"
-        client.publishString(command, topic: "command/wheel_speed", qos: 0, retain: true)
+        client?.publishString(command, topic: "command/wheel_speed", qos: 0, retain: true)
     }
     
     @IBOutlet var leftWheelLabel: UILabel! {
@@ -98,6 +96,7 @@ class ViewController: UIViewController {
     @IBAction func updateLeftWheel(recognizer: UIPanGestureRecognizer) {
         
         guard case .Changed = recognizer.state else { return wheelSpeed.left = 0 }
+        
         let y = recognizer.locationInView(recognizer.view).y
         let value = (y / recognizer.view!.bounds.height * 2) - 1
         wheelSpeed.left = Int(value * -5000)
@@ -106,6 +105,7 @@ class ViewController: UIViewController {
     @IBAction func udpateRightWheel(recognizer: UIPanGestureRecognizer) {
 
         guard case .Changed = recognizer.state else { return wheelSpeed.right = 0 }
+        
         let y = recognizer.locationInView(recognizer.view).y
         let value = (y / recognizer.view!.bounds.height * 2) - 1
         wheelSpeed.right = Int(value * -5000)

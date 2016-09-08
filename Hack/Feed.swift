@@ -59,29 +59,30 @@ extension FeedOperation {
 }
 
 
-public class FeedQueueOperation : FeedOperation{
-
-    private var imageCallback : (UIImage) -> () = {_ in }
+public class FeedQueueOperation : FeedOperation {
+    
+    private let address: String
+    private let imageCallback: UIImage -> ()
+    
+    init(address: String, imageCallback: UIImage -> ()) {
+        self.address = address
+        self.imageCallback = imageCallback
+    }
     
     override public func main() {
         self.state = .Executing
-        let url = NSURL(string: "http://192.168.1.107:8080/frame.jpg")
-        while(self.executing){
+        let url = NSURL(string: "http://\(address):8080/frame.jpg")
+        while(self.executing) {
             let imageData = NSData(contentsOfURL: url!)
             if let imgdata = imageData{
                 if let image = UIImage(data: imgdata){
+                    let filter = CIFilter(
+                    image.CIImage.
                     imageCallback(image)
                 }
             }
             
         }
     }
-    
-    public func subCallback(for image: (UIImage) -> ()){
-        self.imageCallback = image
-    }
-    
-    
-    
 }
 
