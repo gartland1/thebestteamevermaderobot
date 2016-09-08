@@ -11,9 +11,14 @@ import Moscapsule
 
 class ViewController: UIViewController {
 
+    
+    var feedImage : UIImageView = UIImageView()
+    var queue = NSOperationQueue()
+    
     override func viewDidLoad() {
         super.viewDidLoad()
-        // Do any additional setup after loading the view, typically from a nib.
+        self.feedImage = UIImageView(frame: self.view.frame)
+        self.view.insertSubview(self.feedImage, atIndex: 0)
     }
 
     override func didReceiveMemoryWarning() {
@@ -40,6 +45,18 @@ class ViewController: UIViewController {
         return MQTT.newConnection(mqttConfig)
     }()
     
+    @IBAction func btnConnect(sender: AnyObject) {
+        let op = FeedQueueOperation()
+        if(self.queue.operationCount == 0){
+            op.subCallback(for: {image in
+                dispatch_async(dispatch_get_main_queue(), {
+                    self.feedImage.image = image
+                })
+            })
+            self.queue.addOperation(op)
+        }
+    }
+   
     func updateWheels() {
         let command = "{\"Left\":\(wheelSpeed.left), \"Right\":\(wheelSpeed.right)}"
         client.publishString(command, topic: "command/wheel_speed", qos: 0, retain: true)
