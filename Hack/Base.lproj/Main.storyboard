@@ -1,8 +1,9 @@
-<?xml version="1.0" encoding="UTF-8"?>
-<document type="com.apple.InterfaceBuilder3.CocoaTouch.Storyboard.XIB" version="3.0" toolsVersion="10117" systemVersion="16A294a" targetRuntime="iOS.CocoaTouch" propertyAccessControl="none" useAutolayout="YES" useTraitCollections="YES" initialViewController="BYZ-38-t0r">
+<?xml version="1.0" encoding="UTF-8" standalone="no"?>
+<document type="com.apple.InterfaceBuilder3.CocoaTouch.Storyboard.XIB" version="3.0" toolsVersion="10117" systemVersion="15G31" targetRuntime="iOS.CocoaTouch" propertyAccessControl="none" useAutolayout="YES" useTraitCollections="YES" initialViewController="BYZ-38-t0r">
     <dependencies>
         <deployment identifier="iOS"/>
         <plugIn identifier="com.apple.InterfaceBuilder.IBCocoaTouchPlugin" version="10085"/>
+        <capability name="Constraints with non-1.0 multipliers" minToolsVersion="5.1"/>
     </dependencies>
     <scenes>
         <!--View Controller-->
@@ -17,31 +18,85 @@
                         <rect key="frame" x="0.0" y="0.0" width="600" height="600"/>
                         <autoresizingMask key="autoresizingMask" widthSizable="YES" heightSizable="YES"/>
                         <subviews>
-                            <button opaque="NO" contentMode="scaleToFill" contentHorizontalAlignment="center" contentVerticalAlignment="center" buttonType="roundedRect" lineBreakMode="middleTruncation" translatesAutoresizingMaskIntoConstraints="NO" id="SCV-fb-o6t">
-                                <rect key="frame" x="277" y="285" width="46" height="30"/>
-                                <state key="normal" title="Button"/>
+                            <view multipleTouchEnabled="YES" contentMode="scaleToFill" translatesAutoresizingMaskIntoConstraints="NO" id="Dr2-TH-wjw">
+                                <rect key="frame" x="0.0" y="20" width="300" height="580"/>
+                                <subviews>
+                                    <label opaque="NO" userInteractionEnabled="NO" contentMode="left" horizontalHuggingPriority="251" verticalHuggingPriority="251" text="Label" textAlignment="natural" lineBreakMode="tailTruncation" baselineAdjustment="alignBaselines" adjustsFontSizeToFit="NO" translatesAutoresizingMaskIntoConstraints="NO" id="I2B-Av-TnR" userLabel="Left wheel speed">
+                                        <rect key="frame" x="200" y="30" width="42" height="21"/>
+                                        <fontDescription key="fontDescription" type="system" pointSize="17"/>
+                                        <color key="textColor" white="1" alpha="1" colorSpace="calibratedWhite"/>
+                                        <nil key="highlightedColor"/>
+                                    </label>
+                                </subviews>
+                                <color key="backgroundColor" red="0.0" green="0.47843137250000001" blue="1" alpha="1" colorSpace="calibratedRGB"/>
+                                <gestureRecognizers/>
+                                <constraints>
+                                    <constraint firstItem="I2B-Av-TnR" firstAttribute="leading" secondItem="Dr2-TH-wjw" secondAttribute="leading" constant="200" id="VyO-V2-hGL"/>
+                                    <constraint firstItem="I2B-Av-TnR" firstAttribute="top" secondItem="Dr2-TH-wjw" secondAttribute="top" constant="30" id="X7r-wE-IjT"/>
+                                </constraints>
                                 <connections>
-                                    <action selector="dance" destination="BYZ-38-t0r" eventType="touchUpInside" id="eTN-KM-Gi9"/>
+                                    <outletCollection property="gestureRecognizers" destination="rvq-wx-MhU" appends="YES" id="Iia-Ug-Vz7"/>
                                 </connections>
-                            </button>
-                            <button opaque="NO" contentMode="scaleToFill" fixedFrame="YES" contentHorizontalAlignment="center" contentVerticalAlignment="center" buttonType="roundedRect" lineBreakMode="middleTruncation" translatesAutoresizingMaskIntoConstraints="NO" id="gNb-vT-Kk6">
-                                <rect key="frame" x="20" y="20" width="75" height="30"/>
-                                <state key="normal" title="Feed"/>
+                            </view>
+                            <view multipleTouchEnabled="YES" contentMode="scaleToFill" translatesAutoresizingMaskIntoConstraints="NO" id="xoE-69-WbI">
+                                <rect key="frame" x="300" y="20" width="300" height="580"/>
+                                <subviews>
+                                    <label opaque="NO" userInteractionEnabled="NO" contentMode="left" horizontalHuggingPriority="251" verticalHuggingPriority="251" text="Label" textAlignment="natural" lineBreakMode="tailTruncation" baselineAdjustment="alignBaselines" adjustsFontSizeToFit="NO" translatesAutoresizingMaskIntoConstraints="NO" id="3DJ-JH-3xq" userLabel="Right wheel speed">
+                                        <rect key="frame" x="58" y="30" width="42" height="21"/>
+                                        <fontDescription key="fontDescription" type="system" pointSize="17"/>
+                                        <color key="textColor" white="1" alpha="1" colorSpace="calibratedWhite"/>
+                                        <nil key="highlightedColor"/>
+                                    </label>
+                                </subviews>
+                                <color key="backgroundColor" red="1" green="0.0" blue="0.0" alpha="1" colorSpace="calibratedRGB"/>
+                                <gestureRecognizers/>
+                                <constraints>
+                                    <constraint firstAttribute="trailing" secondItem="3DJ-JH-3xq" secondAttribute="trailing" constant="200" id="hKu-co-kJj"/>
+                                    <constraint firstItem="3DJ-JH-3xq" firstAttribute="top" secondItem="xoE-69-WbI" secondAttribute="top" constant="30" id="ufu-G1-5el"/>
+                                </constraints>
                                 <connections>
-                                    <action selector="btnFeed:" destination="BYZ-38-t0r" eventType="touchUpInside" id="UeY-gk-xCe"/>
+                                    <outletCollection property="gestureRecognizers" destination="Fd3-zh-lH3" appends="YES" id="YCe-4N-v3w"/>
                                 </connections>
+                            </view>
+                            <button opaque="NO" contentMode="scaleToFill" contentHorizontalAlignment="center" contentVerticalAlignment="center" buttonType="roundedRect" lineBreakMode="middleTruncation" translatesAutoresizingMaskIntoConstraints="NO" id="DV5-uO-8LZ">
+                                <rect key="frame" x="270.5" y="47" width="59" height="30"/>
+                                <state key="normal" title="Connect">
+                                    <color key="titleColor" white="1" alpha="1" colorSpace="calibratedWhite"/>
+                                </state>
                             </button>
                         </subviews>
                         <color key="backgroundColor" white="1" alpha="1" colorSpace="custom" customColorSpace="calibratedWhite"/>
                         <constraints>
-                            <constraint firstItem="SCV-fb-o6t" firstAttribute="centerX" secondItem="8bC-Xf-vdC" secondAttribute="centerX" id="OU7-Jv-f6B"/>
-                            <constraint firstItem="SCV-fb-o6t" firstAttribute="centerY" secondItem="8bC-Xf-vdC" secondAttribute="centerY" id="dVt-dw-0Gw"/>
+                            <constraint firstAttribute="trailing" secondItem="xoE-69-WbI" secondAttribute="trailing" id="Hd4-MN-wHh"/>
+                            <constraint firstItem="DV5-uO-8LZ" firstAttribute="centerX" secondItem="8bC-Xf-vdC" secondAttribute="centerX" id="M8O-jX-Kjz"/>
+                            <constraint firstItem="Dr2-TH-wjw" firstAttribute="leading" secondItem="8bC-Xf-vdC" secondAttribute="leading" id="N1j-E3-BP4"/>
+                            <constraint firstItem="wfy-db-euE" firstAttribute="top" secondItem="Dr2-TH-wjw" secondAttribute="bottom" id="N5n-S2-PdU"/>
+                            <constraint firstItem="Dr2-TH-wjw" firstAttribute="top" secondItem="y3c-jy-aDJ" secondAttribute="bottom" id="P4M-a5-LgR"/>
+                            <constraint firstItem="wfy-db-euE" firstAttribute="top" secondItem="xoE-69-WbI" secondAttribute="bottom" id="SFa-K8-YRD"/>
+                            <constraint firstItem="Dr2-TH-wjw" firstAttribute="width" secondItem="8bC-Xf-vdC" secondAttribute="width" multiplier="0.5" id="cDh-bb-1Rn"/>
+                            <constraint firstItem="xoE-69-WbI" firstAttribute="width" secondItem="8bC-Xf-vdC" secondAttribute="width" multiplier="0.5" id="eHd-FV-SGs"/>
+                            <constraint firstItem="xoE-69-WbI" firstAttribute="top" secondItem="y3c-jy-aDJ" secondAttribute="bottom" id="lmO-DI-2wq"/>
+                            <constraint firstItem="DV5-uO-8LZ" firstAttribute="top" secondItem="y3c-jy-aDJ" secondAttribute="bottom" constant="27" id="s76-3J-VXy"/>
                         </constraints>
                     </view>
+                    <connections>
+                        <outlet property="leftWheelLabel" destination="I2B-Av-TnR" id="XqZ-DI-dKR"/>
+                        <outlet property="rightWheelLabel" destination="3DJ-JH-3xq" id="fqj-l5-TwW"/>
+                    </connections>
                 </viewController>
                 <placeholder placeholderIdentifier="IBFirstResponder" id="dkx-z0-nzr" sceneMemberID="firstResponder"/>
+                <panGestureRecognizer minimumNumberOfTouches="1" id="rvq-wx-MhU" userLabel="Left wheel">
+                    <connections>
+                        <action selector="updateLeftWheel:" destination="BYZ-38-t0r" id="lp3-Pg-uQh"/>
+                    </connections>
+                </panGestureRecognizer>
+                <panGestureRecognizer minimumNumberOfTouches="1" id="Fd3-zh-lH3" userLabel="Right wheel">
+                    <connections>
+                        <action selector="udpateRightWheel:" destination="BYZ-38-t0r" id="g1Y-Ns-lil"/>
+                    </connections>
+                </panGestureRecognizer>
             </objects>
-            <point key="canvasLocation" x="139" y="136"/>
+            <point key="canvasLocation" x="399" y="169"/>
         </scene>
     </scenes>
 </document>

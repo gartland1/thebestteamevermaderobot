@@ -9,41 +9,19 @@
 import UIKit
 import Moscapsule
 
+class ViewController: UIViewController {
 
-
-public class ViewController: UIViewController {
-
-    private var imageFeed : UIImageView? = nil
-    private var queue = NSOperationQueue()
-    
-    override public func viewDidLoad() {
-        
-        //add image feed view to main uiview
-        self.imageFeed = UIImageView(frame: self.view.frame)
-        self.view.insertSubview(imageFeed!, atIndex: 0)
-        
+    override func viewDidLoad() {
         super.viewDidLoad()
+        // Do any additional setup after loading the view, typically from a nib.
     }
 
-    
-    @IBAction func btnFeed(sender: AnyObject) {
-        if(queue.operationCount <= 0 ){
-            let op = FeedQueueOperation()
-            op.subCallback(for: {image in
-                dispatch_async(dispatch_get_main_queue(), {
-                    self.imageFeed?.image = image
-                })
-            })
-            queue.addOperation(op)
-        }
-    }
-    
-    override public func didReceiveMemoryWarning() {
+    override func didReceiveMemoryWarning() {
         super.didReceiveMemoryWarning()
         // Dispose of any resources that can be recreated.
     }
-
-    @IBAction func dance() {
+    
+    var client: MQTTClient = {
         let mqttConfig = MQTTConfig(clientId: "test", host: "192.168.1.107", port: 1883, keepAlive: 60)
         mqttConfig.onPublishCallback = { messageId in
             NSLog("published (mid=\(messageId))")
@@ -51,17 +29,59 @@ public class ViewController: UIViewController {
         mqttConfig.onMessageCallback = { mqttMessage in
             NSLog("MQTT Message received: payload=\(mqttMessage.payloadString)")
         }
-        mqttConfig.onConnectCallback = { x in
-            print("Connected!!! \(x)")
+        mqttConfig.onConnectCallback = {
+            print("Connected:", $0)
+        }
+        mqttConfig.onDisconnectCallback = {
+            print("Disconnected:", $0)
         }
         
         // create new MQTT Connection
-        let mqttClient = MQTT.newConnection(mqttConfig)
-        
-        // publish and subscribe
-        mqttClient.publishString("{\"Left\": 0,\"Right\": 0}", topic: "command/wheel_speed", qos: 2, retain: true)
-        
-        
+        return MQTT.newConnection(mqttConfig)
+    }()
+    
+    @IBOutlet var leftWheelLabel: UILabel! {
+        didSet { leftWheelLabel.text = String(wheelSpeed.left) }
+    }
+    
+    @IBOutlet var rightWheelLabel: UILabel! {
+        didSet { rightWheelLabel.text = String(wheelSpeed.right) }
+    }
+    
+    struct Wheel {
+        var left = 0, right = 0
+    }
+    
+    var wheelSpeed = Wheel() {
+        didSet {
+            leftWheelLabel.text = String(wheelSpeed.left)
+            rightWheelLabel.text = String(wheelSpeed.right)
+            
+            let command = "{\"Left\":\(wheelSpeed.left),\"Right\":\(wheelSpeed.right)"
+            client.publishString(command, topic: "command/wheel_speed", qos: 2, retain: false)
+        }
+    }
+    
+    @IBAction func updateLeftWheel(recognizer: UIPanGestureRecognizer) {
+        switch recognizer.state {
+        case .Ended: wheelSpeed.left = 0
+        case .Changed:
+            let y = recognizer.locationInView(recognizer.view).y
+            let value = (y / recognizer.view!.bounds.height * 2) - 1
+            wheelSpeed.left = Int(value * -2000)
+
+        default: break }
+    }
+    
+    @IBAction func udpateRightWheel(recognizer: UIPanGestureRecognizer) {
+        switch recognizer.state {
+        case .Ended: wheelSpeed.right = 0
+        case .Changed:
+            let y = recognizer.locationInView(recognizer.view).y
+            let value = (y / recognizer.view!.bounds.height * 2) - 1
+            wheelSpeed.right = Int(value * -8000)
+            
+        default: break }
     }
 }
 
