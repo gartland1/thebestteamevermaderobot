@@ -11,20 +11,44 @@ import Moscapsule
 
 class ViewController: UIViewController {
 
+    @IBOutlet var backCameraView: UIView!
+    @IBOutlet var frontCameraView : UIView!
     
-    var feedImage : UIImageView = UIImageView()
     var queue = NSOperationQueue()
     
-    override func viewDidLoad() {
-        super.viewDidLoad()
-        self.feedImage = UIImageView(frame: self.view.frame)
-        self.view.insertSubview(self.feedImage, atIndex: 0)
-    }
-
     override func didReceiveMemoryWarning() {
         super.didReceiveMemoryWarning()
         // Dispose of any resources that can be recreated.
     }
+    
+    override func viewDidLoad() {
+        super.viewDidLoad()
+        
+        let frontImageView = UIImageView(frame: CGRect(x: 0, y: 0, width: 640, height: 480))
+        frontImageView.layer.anchorPoint =
+            CGPoint(x: 382.0 / 640.0, y: 239.0 / 480.0)
+        frontImageView.frame.origin = CGPoint(x: -382 + 100, y: -280)
+        frontCameraView.addSubview(frontImageView)
+        
+        let backImageView = UIImageView(frame: CGRect(x: 0, y: 0, width: 640, height: 480))
+        backImageView.layer.anchorPoint =
+            CGPoint(x: 382.0 / 640.0, y: 239.0 / 480.0)
+        backImageView.transform = CGAffineTransformMakeRotation(.init(M_PI))
+        backImageView.frame.origin = CGPoint(x: -382 + 100, y: -280)
+        backCameraView.addSubview(backImageView)
+        
+        let op = FeedQueueOperation()
+        if(self.queue.operationCount == 0){
+            op.subCallback(for: {image in
+                dispatch_async(dispatch_get_main_queue(), {
+                    frontImageView.image = image
+                    backImageView.image = image
+                })
+            })
+            self.queue.addOperation(op)
+        }
+    }
+    
     var client: MQTTClient = {
         let mqttConfig = MQTTConfig(clientId: "test", host: "192.168.1.107", port: 1883, keepAlive: 60)
         mqttConfig.onPublishCallback = { messageId in
@@ -44,18 +68,6 @@ class ViewController: UIViewController {
         // create new MQTT Connection
         return MQTT.newConnection(mqttConfig)
     }()
-    
-    @IBAction func btnConnect(sender: AnyObject) {
-        let op = FeedQueueOperation()
-        if(self.queue.operationCount == 0){
-            op.subCallback(for: {image in
-                dispatch_async(dispatch_get_main_queue(), {
-                    self.feedImage.image = image
-                })
-            })
-            self.queue.addOperation(op)
-        }
-    }
    
     func updateWheels() {
         let command = "{\"Left\":\(wheelSpeed.left), \"Right\":\(wheelSpeed.right)}"
@@ -84,25 +96,19 @@ class ViewController: UIViewController {
     }
     
     @IBAction func updateLeftWheel(recognizer: UIPanGestureRecognizer) {
-        switch recognizer.state {
-        case .Ended: wheelSpeed.left = 0
-        case .Changed:
-            let y = recognizer.locationInView(recognizer.view).y
-            let value = (y / recognizer.view!.bounds.height * 2) - 1
-            wheelSpeed.left = Int(value * -8000)
-
-        default: break }
+        
+        guard case .Changed = recognizer.state else { return wheelSpeed.left = 0 }
+        let y = recognizer.locationInView(recognizer.view).y
+        let value = (y / recognizer.view!.bounds.height * 2) - 1
+        wheelSpeed.left = Int(value * -5000)
     }
     
     @IBAction func udpateRightWheel(recognizer: UIPanGestureRecognizer) {
-        switch recognizer.state {
-        case .Ended: wheelSpeed.right = 0
-        case .Changed:
-            let y = recognizer.locationInView(recognizer.view).y
-            let value = (y / recognizer.view!.bounds.height * 2) - 1
-            wheelSpeed.right = Int(value * -8000)
-            
-        default: break }
+
+        guard case .Changed = recognizer.state else { return wheelSpeed.right = 0 }
+        let y = recognizer.locationInView(recognizer.view).y
+        let value = (y / recognizer.view!.bounds.height * 2) - 1
+        wheelSpeed.right = Int(value * -5000)
     }
 }
 
