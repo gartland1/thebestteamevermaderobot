@@ -20,7 +20,17 @@ class ViewController: UIViewController {
         super.didReceiveMemoryWarning()
         // Dispose of any resources that can be recreated.
     }
-
+    
+    
+    override func touchesMoved(touches: Set<UITouch>, withEvent event: UIEvent?) {
+        if let touch = touches.first {
+            let position :CGPoint = touch.locationInView(view)
+            print(position.x)
+            print(position.y)
+            
+        }
+    }
+    
     @IBAction func dance() {
         let mqttConfig = MQTTConfig(clientId: "test", host: "192.168.1.107", port: 1883, keepAlive: 60)
         mqttConfig.onPublishCallback = { messageId in
