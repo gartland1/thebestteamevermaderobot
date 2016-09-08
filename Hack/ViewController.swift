@@ -10,24 +10,45 @@ import UIKit
 import Moscapsule
 
 class ViewController: UIViewController {
+    
+    var middlePortrait = UIScreen.mainScreen().bounds.width/2
+    var middleLandscape = UIScreen.mainScreen().bounds.width/2
+
 
     override func viewDidLoad() {
+        NSNotificationCenter.defaultCenter().addObserver(self, selector: #selector(ViewController.rotated), name:UIDeviceOrientationDidChangeNotification, object: nil)
+
         super.viewDidLoad()
-        // Do any additional setup after loading the view, typically from a nib.
+
+    }
+    
+    func rotated()
+    {
+        if(UIDeviceOrientationIsLandscape(UIDevice.currentDevice().orientation))
+        {
+            middleLandscape = UIScreen.mainScreen().bounds.width/2
+            print(middleLandscape)
+            print("landscape")
+            
+        }else{
+            middlePortrait = UIScreen.mainScreen().bounds.width/2
+            print(middlePortrait)
+            print("portrait")
+        }
+        
     }
 
     override func didReceiveMemoryWarning() {
         super.didReceiveMemoryWarning()
         // Dispose of any resources that can be recreated.
+        
     }
     
     
     override func touchesMoved(touches: Set<UITouch>, withEvent event: UIEvent?) {
         if let touch = touches.first {
             let position :CGPoint = touch.locationInView(view)
-            print(position.x)
-            print(position.y)
-            
+                print(position.x - middleLandscape, position.y - middlePortrait)
         }
     }
     
