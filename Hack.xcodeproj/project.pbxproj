@@ -8,6 +8,7 @@
 
 /* Begin PBXBuildFile section */
 		4AFD8F19051C29C1D9CDA924 /* Pods_Hack.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 7815C28CF58B498BF00F8954 /* Pods_Hack.framework */; };
+		5A06FF3C1D81AB56006E3824 /* Feed.swift in Sources */ = {isa = PBXBuildFile; fileRef = 5A06FF3B1D81AB56006E3824 /* Feed.swift */; };
 		DE402EEF1D819AAA006FC64D /* AppDelegate.swift in Sources */ = {isa = PBXBuildFile; fileRef = DE402EEE1D819AAA006FC64D /* AppDelegate.swift */; };
 		DE402EF11D819AAA006FC64D /* ViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = DE402EF01D819AAA006FC64D /* ViewController.swift */; };
 		DE402EF41D819AAB006FC64D /* Main.storyboard in Resources */ = {isa = PBXBuildFile; fileRef = DE402EF21D819AAB006FC64D /* Main.storyboard */; };
@@ -17,6 +18,7 @@
 
 /* Begin PBXFileReference section */
 		2FFEBE9CAB48A73B27A31B14 /* Pods-Hack.debug.xcconfig */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = text.xcconfig; name = "Pods-Hack.debug.xcconfig"; path = "Pods/Target Support Files/Pods-Hack/Pods-Hack.debug.xcconfig"; sourceTree = "<group>"; };
+		5A06FF3B1D81AB56006E3824 /* Feed.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = Feed.swift; sourceTree = "<group>"; };
 		7815C28CF58B498BF00F8954 /* Pods_Hack.framework */ = {isa = PBXFileReference; explicitFileType = wrapper.framework; includeInIndex = 0; path = Pods_Hack.framework; sourceTree = BUILT_PRODUCTS_DIR; };
 		789B58D889FAE96E6160B803 /* Pods-Hack.release.xcconfig */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = text.xcconfig; name = "Pods-Hack.release.xcconfig"; path = "Pods/Target Support Files/Pods-Hack/Pods-Hack.release.xcconfig"; sourceTree = "<group>"; };
 		DE402EEB1D819AAA006FC64D /* Hack.app */ = {isa = PBXFileReference; explicitFileType = wrapper.application; includeInIndex = 0; path = Hack.app; sourceTree = BUILT_PRODUCTS_DIR; };
@@ -84,6 +86,7 @@
 				DE402EF51D819AAB006FC64D /* Assets.xcassets */,
 				DE402EF71D819AAB006FC64D /* LaunchScreen.storyboard */,
 				DE402EFA1D819AAB006FC64D /* Info.plist */,
+				5A06FF3B1D81AB56006E3824 /* Feed.swift */,
 			);
 			path = Hack;
 			sourceTree = "<group>";
@@ -95,12 +98,15 @@
 			isa = PBXNativeTarget;
 			buildConfigurationList = DE402EFD1D819AAB006FC64D /* Build configuration list for PBXNativeTarget "Hack" */;
 			buildPhases = (
+				1D3F0D731D4FA0BFBAFFC336 /* 📦 Check Pods Manifest.lock */,
 				67EAEEB28450235A54809972 /* [CP] Check Pods Manifest.lock */,
 				DE402EE71D819AAA006FC64D /* Sources */,
 				DE402EE81D819AAA006FC64D /* Frameworks */,
 				DE402EE91D819AAA006FC64D /* Resources */,
 				FA0C7875D6792E67F99C884C /* [CP] Embed Pods Frameworks */,
 				D0312A9F9B0FFE2DCBF19403 /* [CP] Copy Pods Resources */,
+				3DBEC0D9E790651C0E157750 /* 📦 Embed Pods Frameworks */,
+				504116D1B2519A3F448DE094 /* 📦 Copy Pods Resources */,
 			);
 			buildRules = (
 			);
@@ -158,6 +164,51 @@
 /* End PBXResourcesBuildPhase section */
 
 /* Begin PBXShellScriptBuildPhase section */
+		1D3F0D731D4FA0BFBAFFC336 /* 📦 Check Pods Manifest.lock */ = {
+			isa = PBXShellScriptBuildPhase;
+			buildActionMask = 2147483647;
+			files = (
+			);
+			inputPaths = (
+			);
+			name = "📦 Check Pods Manifest.lock";
+			outputPaths = (
+			);
+			runOnlyForDeploymentPostprocessing = 0;
+			shellPath = /bin/sh;
+			shellScript = "diff \"${PODS_ROOT}/../Podfile.lock\" \"${PODS_ROOT}/Manifest.lock\" > /dev/null\nif [[ $? != 0 ]] ; then\n    cat << EOM\nerror: The sandbox is not in sync with the Podfile.lock. Run 'pod install' or update your CocoaPods installation.\nEOM\n    exit 1\nfi\n";
+			showEnvVarsInLog = 0;
+		};
+		3DBEC0D9E790651C0E157750 /* 📦 Embed Pods Frameworks */ = {
+			isa = PBXShellScriptBuildPhase;
+			buildActionMask = 2147483647;
+			files = (
+			);
+			inputPaths = (
+			);
+			name = "📦 Embed Pods Frameworks";
+			outputPaths = (
+			);
+			runOnlyForDeploymentPostprocessing = 0;
+			shellPath = /bin/sh;
+			shellScript = "\"${SRCROOT}/Pods/Target Support Files/Pods-Hack/Pods-Hack-frameworks.sh\"\n";
+			showEnvVarsInLog = 0;
+		};
+		504116D1B2519A3F448DE094 /* 📦 Copy Pods Resources */ = {
+			isa = PBXShellScriptBuildPhase;
+			buildActionMask = 2147483647;
+			files = (
+			);
+			inputPaths = (
+			);
+			name = "📦 Copy Pods Resources";
+			outputPaths = (
+			);
+			runOnlyForDeploymentPostprocessing = 0;
+			shellPath = /bin/sh;
+			shellScript = "\"${SRCROOT}/Pods/Target Support Files/Pods-Hack/Pods-Hack-resources.sh\"\n";
+			showEnvVarsInLog = 0;
+		};
 		67EAEEB28450235A54809972 /* [CP] Check Pods Manifest.lock */ = {
 			isa = PBXShellScriptBuildPhase;
 			buildActionMask = 2147483647;
@@ -211,6 +262,7 @@
 			buildActionMask = 2147483647;
 			files = (
 				DE402EF11D819AAA006FC64D /* ViewController.swift in Sources */,
+				5A06FF3C1D81AB56006E3824 /* Feed.swift in Sources */,
 				DE402EEF1D819AAA006FC64D /* AppDelegate.swift in Sources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;

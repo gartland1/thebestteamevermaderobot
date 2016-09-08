@@ -9,14 +9,36 @@
 import UIKit
 import Moscapsule
 
-class ViewController: UIViewController {
 
-    override func viewDidLoad() {
+
+public class ViewController: UIViewController {
+
+    private var imageFeed : UIImageView? = nil
+    private var queue = NSOperationQueue()
+    
+    override public func viewDidLoad() {
+        
+        //add image feed view to main uiview
+        self.imageFeed = UIImageView(frame: self.view.frame)
+        self.view.insertSubview(imageFeed!, atIndex: 0)
+        
         super.viewDidLoad()
-        // Do any additional setup after loading the view, typically from a nib.
     }
 
-    override func didReceiveMemoryWarning() {
+    
+    @IBAction func btnFeed(sender: AnyObject) {
+        if(queue.operationCount <= 0 ){
+            let op = FeedQueueOperation()
+            op.subCallback(for: {image in
+                dispatch_async(dispatch_get_main_queue(), {
+                    self.imageFeed?.image = image
+                })
+            })
+            queue.addOperation(op)
+        }
+    }
+    
+    override public func didReceiveMemoryWarning() {
         super.didReceiveMemoryWarning()
         // Dispose of any resources that can be recreated.
     }
@@ -37,7 +59,7 @@ class ViewController: UIViewController {
         let mqttClient = MQTT.newConnection(mqttConfig)
         
         // publish and subscribe
-        mqttClient.publishString("{\"Left\": -4000,\"Right\": 4000}", topic: "command/wheel_speed", qos: 2, retain: true)
+        mqttClient.publishString("{\"Left\": 0,\"Right\": 0}", topic: "command/wheel_speed", qos: 2, retain: true)
         
         
     }
